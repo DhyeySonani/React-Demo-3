@@ -1,19 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 let nextId = 1;
 
 export const UserInfo = ({
   userInfo,
   setUserInfo,
-  updateId,
+  editingUser,
   setUpdateId,
 }) => {
-  const editingUser = userInfo.find(
-    (curElem) => curElem.id === updateId && curElem.pos === "right"
-  );
-
-  const isEditing = !!editingUser;
-
   const defaultUser = {
     username: "",
     fullname: "",
@@ -24,26 +18,21 @@ export const UserInfo = ({
 
   const [user, setUser] = useState(defaultUser);
 
-  const shouldReset =
-    !isEditing && user.id !== null;
+  useEffect(() => {
+    if (editingUser) {
+      setUser({
+        id: editingUser.id,
+        username: editingUser.username,
+        fullname: editingUser.fullname,
+        city: editingUser.city,
+        age: editingUser.age,
+      });
+    } else {
+      setUser(defaultUser);
+    }
+  }, [editingUser]);
 
-  const shouldPrefill =
-    isEditing && user.id !== editingUser.id;
-
-  if (shouldReset) {
-    setUser(defaultUser);
-    setUpdateId(undefined);
-  }
-
-  if (shouldPrefill) {
-    setUser({
-      id: editingUser.id,
-      username: editingUser.username,
-      fullname: editingUser.fullname,
-      city: editingUser.city,
-      age: editingUser.age,
-    });
-  }
+  const isEditing = !!editingUser;
 
   const handleChange = (field) => (e) => {
     const value =
@@ -53,15 +42,13 @@ export const UserInfo = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const { id, ...rest } = user;
 
     if (isEditing) {
       const updated = userInfo.map((curElem) =>
-        curElem.id === updateId ? { ...curElem, ...rest } : curElem
+        curElem.id === editingUser.id ? { ...curElem, ...rest, editing: false } : curElem
       );
       setUserInfo(updated);
-      setUpdateId(undefined);
     } else {
       const newUser = { id: nextId++, ...rest, pos: "left" };
       setUserInfo([...userInfo, newUser]);
@@ -71,38 +58,36 @@ export const UserInfo = ({
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Username"
-          value={user.username}
-          onChange={handleChange("username")}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Fullname"
-          value={user.fullname}
-          onChange={handleChange("fullname")}
-          required
-        />
-        <input
-          type="text"
-          placeholder="City"
-          value={user.city}
-          onChange={handleChange("city")}
-          required
-        />
-        <input
-          type="number"
-          placeholder="Age"
-          value={user.age}
-          onChange={handleChange("age")}
-          required
-        />
-        <button type="submit">{isEditing ? "Update User" : "Add User"}</button>
-      </form>
-    </>
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        placeholder="Username"
+        value={user.username}
+        onChange={handleChange("username")}
+        required
+      />
+      <input
+        type="text"
+        placeholder="Fullname"
+        value={user.fullname}
+        onChange={handleChange("fullname")}
+        required
+      />
+      <input
+        type="text"
+        placeholder="City"
+        value={user.city}
+        onChange={handleChange("city")}
+        required
+      />
+      <input
+        type="number"
+        placeholder="Age"
+        value={user.age}
+        onChange={handleChange("age")}
+        required
+      />
+      <button type="submit">{isEditing ? "Update User" : "Add User"}</button>
+    </form>
   );
 };

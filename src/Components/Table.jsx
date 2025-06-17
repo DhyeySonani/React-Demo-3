@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 
 export const Table = ({
@@ -7,7 +7,7 @@ export const Table = ({
   setUserInfo,
   selected,
   uniqueSelected,
-  setUpdateId
+  setUpdateId,
 }) => {
   const [sort, setSort] = useState({ field: "", direction: "" });
 
@@ -40,37 +40,26 @@ export const Table = ({
   const renderSortArrows = (field) => {
     if (sort.field === field) {
       return sort.direction === "asc" ? (
-        <FaArrowUp
-          style={{ fontSize: "0.5rem", cursor: "pointer" }}
-          onClick={() => handleSort(field)}
-        />
+        <FaArrowUp style={{ fontSize: "0.5rem", cursor: "pointer" }} onClick={() => handleSort(field)} />
       ) : (
-        <FaArrowDown
-          style={{ fontSize: "0.5rem", cursor: "pointer" }}
-          onClick={() => handleSort(field)}
-        />
+        <FaArrowDown style={{ fontSize: "0.5rem", cursor: "pointer" }} onClick={() => handleSort(field)} />
       );
     }
     return (
       <>
-        <FaArrowUp
-          style={{ fontSize: "0.5rem", cursor: "pointer", marginRight: 3 }}
-          onClick={() => handleSort(field)}
-        />
-        <FaArrowDown
-          style={{ fontSize: "0.5rem", cursor: "pointer" }}
-          onClick={() => handleSort(field)}
-        />
+        <FaArrowUp style={{ fontSize: "0.5rem", cursor: "pointer", marginRight: 3 }} onClick={() => handleSort(field)} />
+        <FaArrowDown style={{ fontSize: "0.5rem", cursor: "pointer" }} onClick={() => handleSort(field)} />
       </>
     );
   };
 
   const handelEditDelete = (ops, ID) => {
-    if (ops === 'Edit') setUpdateId(ID)
-    else {
-      setUserInfo(userInfo.filter((curElem) => curElem.id !== ID))
+    if (ops === "Edit") {
+      setUpdateId(ID);
+    } else {
+      setUserInfo(userInfo.filter((curElem) => curElem.id !== ID));
     }
-  }
+  };
 
   return (
     <div>
@@ -78,31 +67,23 @@ export const Table = ({
       <table>
         <thead>
           <tr>
-            <th>
-              Username {renderSortArrows("username")}
-            </th>
-            <th>
-              Fullname {renderSortArrows("fullname")}
-            </th>
-            <th>
-              City {renderSortArrows("city")}
-            </th>
-            <th>
-              Age {renderSortArrows("age")}
-            </th>
+            <th>Username {renderSortArrows("username")}</th>
+            <th>Fullname {renderSortArrows("fullname")}</th>
+            <th>City {renderSortArrows("city")}</th>
+            <th>Age {renderSortArrows("age")}</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {data.map((user) => (
-            <tr key={user.id}>
-              <td>{user.username}</td>
-              <td>{user.fullname}</td>
-              <td>{user.city}</td>
-              <td>{user.age}</td>
+          {data.map((curElem) => (
+            <tr key={curElem.id}>
+              <td>{curElem.username}</td>
+              <td>{curElem.fullname}</td>
+              <td>{curElem.city}</td>
+              <td>{curElem.age}</td>
               <td>
-                <button onClick={() => handelEditDelete('Edit', user.id)}>Edit</button>
-                <button onClick={() => handelEditDelete('Delete', user.id)}>Delete</button>
+                <button onClick={() => handelEditDelete("Edit", curElem.id)}>Edit</button>
+                <button onClick={() => handelEditDelete("Delete", curElem.id)}>Delete</button>
               </td>
             </tr>
           ))}

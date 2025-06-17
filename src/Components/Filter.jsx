@@ -8,10 +8,8 @@ export const Filter = ({
   setSlected,
   setUpdateId
 }) => {
-
   const [uniqueSelected, setUniqueSelected] = useState("");
   const [isFilter, setIsFilter] = useState("all");
-
   const [tempFilter, setTempFilter] = useState({ field: "", value: "" });
 
   const handleFieldChange = (e) => {
@@ -19,7 +17,7 @@ export const Filter = ({
   };
 
   const handleValueChange = (e) => {
-    setTempFilter(prev => ({ ...prev, value: e.target.value }));
+    setTempFilter((prev) => ({ ...prev, value: e.target.value }));
   };
 
   const handleFilterClick = () => {
@@ -27,25 +25,24 @@ export const Filter = ({
       alert("Select field and value");
       return;
     }
-
-    setSlected(tempFilter.field );
+    setSlected(tempFilter.field);
     setUniqueSelected(tempFilter.value);
     setIsFilter("filter");
   };
 
   const handleAllClick = () => {
-    setSlected('');
+    setSlected("");
     setUniqueSelected("");
     setTempFilter({ field: "", value: "" });
     setIsFilter("all");
   };
 
   const uniqueFilter = [...new Set(
-  userInfo
-    .filter((curElem) => curElem.pos === "right")
-    .map((curElem) => curElem[tempFilter.field])
-    .filter((curElem) => curElem !== undefined && curElem !== null && curElem !== "")
-)];
+    userInfo
+      .filter((curElem) => curElem.pos === "right")
+      .map((curElem) => curElem[tempFilter.field])
+      .filter((curElem) => curElem !== undefined && curElem !== null && curElem !== "")
+  )];
 
   return (
     <>
@@ -69,12 +66,12 @@ export const Filter = ({
       <button onClick={handleFilterClick}>Filter</button>
       <button onClick={handleAllClick}>All</button>
 
-      <Table 
-        isFilter={isFilter} 
-        userInfo={userInfo} 
+      <Table
+        isFilter={isFilter}
+        userInfo={userInfo}
         setUserInfo={setUserInfo}
-        selected={selected} 
-        uniqueSelected={uniqueSelected} 
+        selected={selected}
+        uniqueSelected={uniqueSelected}
         setUpdateId={setUpdateId}
       />
     </>
